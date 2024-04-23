@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Home - {{ block.super }}
+{% endblock %}
+
+{% block content %}
+    <style>
+        .home-section {
+            text-align: center; /* Center align the content */
+        }
+
+        .product-list {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .product-item {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .product-item img {
+            max-width: 100%;
+            height: auto;
+            max-height: 250px; /* Adjust the maximum height of the images */
+        }
+
+        .product-item h3 {
+            margin-top: 10px;
+            font-size: 18px;
+        }
+
+        .product-item p {
+            font-size: 16px;
+            margin-top: 5px;
+        }
+    </style>
+
+    <section class="home-section">
+        <h2>Welcome to Our Shopping Website!</h2>
+        <p>Explore our wide range of products.</p>
+        <div class="product-list">
+            {% for product in products %}
+            <div class="product-item">
+                <img src="{{ product.image_url }}" alt="{{ product.title }}">
+                <h3>{{ product.title }}</h3>
+                <p>Price: ${{ product.price }}</p>
+                <button onclick="addToCart('{{ product.id }}')">Add to Cart</button>
+            </div>
+            {% endfor %}
+        </div>
+        <p><a href="{% url 'product_list' %}">View Product List</a></p>
+    </section>
+
+    <script>
+        function addToCart(productId) {
+            // Send an AJAX request to add the product to the cart
+            fetch('/add-to-cart/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({productId: productId})
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Update the cart icon count
+                document.querySelector('.cart-count').innerText = data.cartItemCount;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+{% endblock %}

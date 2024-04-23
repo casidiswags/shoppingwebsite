@@ -1,0 +1,58 @@
+{% extends 'base.html' %}  <!-- Assuming 'base.html' is your base template -->
+
+{% block content %}
+    <h1 style="text-align: center;">Product List</h1>  <!-- Centered header -->
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 2px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+            border-top: 2px solid #ddd;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        img {
+            max-width: 100px;
+            max-height: 100px;
+        }
+    </style>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Product ID</th>
+                <th>Title</th>
+                <th>Gender</th>
+                <th>Category</th>
+                <th>Subcategory</th>
+                <th>Product Type</th>
+                <th>Colour</th>
+                <th>Usage</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+            <tr>
+                <td>{{ product.product_id }}</td>
+                <td>{{ product.title }}</td>
+                <td>{{ product.gender }}</td>
+                <td>{{ product.category }}</td>
+                <td>{{ product.subcategory }}</td>
+                <td>{{ product.product_type }}</td>
+                <td>{{ product.colour }}</td>
+                <td>{{ product.usage }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

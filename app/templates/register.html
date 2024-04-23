@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    User Registration - {{ block.super }}
+{% endblock %}
+
+{% block content %}
+    <nav>
+        <ul>
+            <li><a href="{% url 'index' %}">Home</a></li>
+            <li><a href="{% url 'product_list' %}">Products</a></li>
+            <li><a href="{% url 'cart' %}">Cart</a></li>
+            <li><a href="{% url 'register' %}">Register</a></li>
+            <li><a href="{% url 'login' %}">Login</a></li>
+        </ul>
+    </nav>
+    <div class="container" style="text-align: center;">
+        <h2>User Registration</h2>
+        <form action="{% url 'register' %}" method="post" style="display: inline-block; text-align: left;">
+            {% csrf_token %}
+            <div class="form-group" style="margin-bottom: 10px;">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required style="display: block; margin: auto;">
+            </div>
+            <div class="form-group" style="margin-bottom: 10px;">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required style="display: block; margin: auto;">
+            </div>
+            <div class="form-group" style="margin-bottom: 10px;">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required style="display: block; margin: auto;">
+            </div>
+            <div class="form-group" style="margin-bottom: 10px;">
+                <label for="confirm_password">Confirm Password:</label>
+                <input type="password" id="confirm_password" name="confirm_password" required style="display: block; margin: auto;">
+            </div>
+            <button type="submit">Register</button>
+        </form>
+    </div>
+{% endblock %}

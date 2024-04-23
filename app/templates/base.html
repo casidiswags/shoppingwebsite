@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}My Website{% endblock %}</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 20px 0;
+            overflow: hidden; /* Clear the float */
+        }
+
+        nav {
+            float: left; /* Float the nav to the left */
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            text-align: center;
+            margin: 0; /* Added to remove default margin */
+        }
+
+        nav ul li {
+            display: inline;
+            margin-right: 20px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        nav ul li a:hover {
+            text-decoration: underline;
+        }
+
+        /* Search form style */
+        .search-form {
+            float: right; /* Align to the right */
+            margin-top: 10px;
+            margin-right: 20px; /* Adjust the margin to align with nav */
+        }
+
+        .search-form input[type="text"] {
+            padding: 5px;
+            width: 200px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        .search-form button {
+            padding: 5px 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .search-form button:hover {
+            background-color: #0056b3;
+        }
+
+        main {
+            padding: 20px;
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        h1 {
+            font-size: 35px;
+        }
+
+        /* Cart icon style */
+        .cart-icon {
+            float: right;
+            margin-top: 20px;
+            margin-right: 20px;
+        }
+
+        .cart-icon img {
+            width: 30px;
+            height: 30px;
+            vertical-align: middle;
+        }
+
+        .cart-count {
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 50%;
+            padding: 5px 8px;
+            font-size: 14px;
+            position: absolute;
+            top: 5px;
+            right: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Shopping Website</h1>
+    <nav>
+        <ul>
+            <li><a href="{% url 'index' %}">Home</a></li>
+            <li><a href="{% url 'product_list' %}">Products</a></li>
+            <li><a href="{% url 'cart' %}">Cart</a></li>
+            <li><a href="{% url 'register' %}">Register</a></li>
+            <li><a href="{% url 'login' %}">Login</a></li>
+            <li><a href="{% url 'admin:index' %}">Admin</a></li>
+        </ul>
+    </nav>
+    <!-- Search form -->
+    <div class="search-form">
+        <form action="{% url 'product_search' %}" method="GET">
+            <input type="text" name="query" placeholder="Search for products">
+            <button type="submit">Search</button>
+        </form>
+    </div>
+    <!-- Cart icon -->
+    <div class="cart-icon">
+        <a href="{% url 'cart' %}">
+ 
+            <span class="cart-count">0</span> <!-- Display the count of items in the cart -->
+        </a>
+    </div>
+</header>
+
+<main>
+    {% block content %}{% endblock %}
+</main>
+
+<footer>
+    <p>&copy; {% now "Y" %} My Website</p>
+</footer>
+
+</body>
+</html>

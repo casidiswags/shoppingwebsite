@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Cart - {{ block.super }}
+{% endblock %}
+
+{% block content %}
+    <style>
+        .cart-section {
+            text-align: center; /* Center align the content */
+        }
+
+        .cart-items {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .cart-item {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .cart-item img {
+            max-width: 100%;
+            height: auto;
+            max-height: 200px; /* Adjust the maximum height of the images */
+        }
+
+        .cart-item h3 {
+            margin-top: 10px;
+            font-size: 16px;
+        }
+
+        .cart-item p {
+            font-size: 14px;
+            margin-top: 5px;
+        }
+    </style>
+
+    <section class="cart-section">
+        <h2>Your Cart</h2>
+        <div class="cart-items">
+            {% for item in cart_items %}
+                <div class="cart-item">
+                    <img src="{{ item.product.image_url }}" alt="{{ item.product.title }}">
+                    <h3>{{ item.product.title }}</h3>
+                    <p>Price: ${{ item.product.price }}</p>
+                </div>
+            {% endfor %}
+        </div>
+        <p><a href="{% url 'checkout' %}">Proceed to Checkout</a></p>
+    </section>
+{% endblock %}
