@@ -17,9 +17,13 @@ class Product(models.Model):
         return self.title
 
 class CartItem(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    session_id = models.CharField(max_length=255, null=True, blank=True)
     quantity = models.PositiveIntegerField(default=1)
 
     def __str__(self):
-        return f"{self.quantity} of {self.product.title} in {self.user}'s cart"
+        if self.user:
+            return f"{self.quantity} of {self.product.title} in {self.user}'s cart"
+        else:
+            return f"{self.quantity} of {self.product.title} in session {self.session_id}"

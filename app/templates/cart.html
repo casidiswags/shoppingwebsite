@@ -47,6 +47,8 @@
                     <img src="{{ item.product.image_url }}" alt="{{ item.product.title }}">
                     <h3>{{ item.product.title }}</h3>
                     <p>Price: ${{ item.product.price }}</p>
+                    <p>Quantity: {{ item.quantity }}</p> <!-- Display item quantity -->
+                    <p>Total Price: ${{ item.total_price }}</p> <!-- Display total price for the item -->
                 </div>
             {% endfor %}
         </div>

@@ -1,5 +1,3 @@
-# app/management/commands/import_data.py
-
 import os
 import csv
 from django.core.management.base import BaseCommand

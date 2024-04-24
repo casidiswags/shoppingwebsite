@@ -58,7 +58,7 @@
     <script>
         function addToCart(productId) {
             // Send an AJAX request to add the product to the cart
-            fetch('/add-to-cart/', {
+            fetch('/add-to-cart/' + productId + '/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
