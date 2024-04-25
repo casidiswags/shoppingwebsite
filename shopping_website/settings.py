@@ -5,7 +5,7 @@ from django.core.management.utils import get_random_secret_key
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-SECRET_KEY = get_random_secret_key()
+SECRET_KEY = 'django-insecure-secret-key'
 
 DEBUG = True  # Set DEBUG to False in production
 
@@ -89,3 +89,4 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')  # Collect static files to this directory for production
+CSRF_TRUSTED_ORIGINS = ['https://herbertmonday-doorjacob-8000.codio-box.uk']

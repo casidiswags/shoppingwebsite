@@ -5,53 +5,144 @@
 {% endblock %}
 
 {% block content %}
-    <style>
-        .cart-section {
-            text-align: center; /* Center align the content */
-        }
-
-        .cart-items {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-        }
-
-        .cart-item {
-            border: 1px solid #ccc;
-            padding: 10px;
-            text-align: center;
-        }
-
-        .cart-item img {
-            max-width: 100%;
-            height: auto;
-            max-height: 200px; /* Adjust the maximum height of the images */
-        }
-
-        .cart-item h3 {
-            margin-top: 10px;
-            font-size: 16px;
-        }
-
-        .cart-item p {
-            font-size: 14px;
-            margin-top: 5px;
-        }
-    </style>
-
     <section class="cart-section">
+        <style>
+            /* Cart Section Styles */
+            .cart-section {
+                text-align: center;
+                margin: 60px 200px; /* Reduce the margin on the left and right sides */
+                border: 1px solid #ddd;
+                padding: 10px;
+            }
+
+            .cart-items-container {
+                width: 60%;
+                margin: 0 auto;
+                text-align: left;
+                overflow-y: auto;
+                max-height: 400px; /* Set a maximum height for the scrollable list */
+            }
+
+            .cart-item-list {
+                list-style: none;
+                padding: 0;
+            }
+
+            .cart-item-list li {
+                margin-bottom: 20px;
+                border-bottom: 1px solid #eee;
+                padding-bottom: 10px;
+                display: flex; /* Arrange item details horizontally */
+                align-items: center;
+            }
+
+            .cart-item img {
+                max-width: 100px;
+                height: auto;
+                max-height: 150px;
+                margin-right: 10px;
+            }
+
+            .cart-item-details {
+                flex-grow: 1; /* Take up remaining space */
+            }
+
+            .cart-item-details h3 {
+                margin-top: 0;
+                font-size: 14px;
+            }
+
+            .cart-item-details p {
+                font-size: 12px;
+                margin-top: 5px;
+            }
+
+            .remove-btn {
+                background-color: #ff6347;
+                color: white;
+                border: none;
+                padding: 6px 12px;
+                text-align: center;
+                text-decoration: none;
+                font-size: 12px;
+                border-radius: 4px;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+                margin-left: auto; /* Align button to the right */
+            }
+
+            .remove-btn:hover {
+                background-color: #ff483d;
+            }
+
+            .total-price {
+                font-size: 16px;
+                font-weight: bold;
+            }
+
+            .checkout-btn {
+                background-color: #007bff;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                text-align: center;
+                text-decoration: none;
+                font-size: 14px;
+                border-radius: 4px;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+            }
+
+            .checkout-btn:hover {
+                background-color: #45a049;
+            }
+        </style>
+        
         <h2>Your Cart</h2>
-        <div class="cart-items">
-            {% for item in cart_items %}
-                <div class="cart-item">
-                    <img src="{{ item.product.image_url }}" alt="{{ item.product.title }}">
-                    <h3>{{ item.product.title }}</h3>
-                    <p>Price: ${{ item.product.price }}</p>
-                    <p>Quantity: {{ item.quantity }}</p> <!-- Display item quantity -->
-                    <p>Total Price: ${{ item.total_price }}</p> <!-- Display total price for the item -->
-                </div>
-            {% endfor %}
+        <div class="cart-items-container">
+            <ul class="cart-item-list">
+                {% for item in cart_items %}
+                    <li class="cart-item">
+                        <img src="{{ item.product.image_url }}" alt="{{ item.product.title }}">
+                        <div class="cart-item-details">
+                            <h3>{{ item.product.title }}</h3>
+                            <p>Price: ${{ item.product.price }}</p>
+                            <p>Quantity: {{ item.quantity }}</p>
+                            <p>Total Price: ${{ item.total_price }}</p>
+                        </div>
+                        <button class="remove-btn" onclick="removeFromCart({{ item.id }})">Remove</button>
+                    </li>
+                {% endfor %}
+            </ul>
         </div>
-        <p><a href="{% url 'checkout' %}">Proceed to Checkout</a></p>
+        <p class="total-price">Total: ${{ total_price }}</p>
+        <a href="{% url 'checkout' %}" class="checkout-btn">Checkout</a>
     </section>
+
+    <script>
+        function removeFromCart(itemId) {
+            // Send a request to remove the item from the cart
+            fetch(`/remove-from-cart/${itemId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}', // Include CSRF token
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ itemId: itemId })
+            })
+            .then(response => {
+                if (response.ok) {
+                    // If item removed successfully, reload the page
+                    location.reload();
+                } else {
+                    // If there's an error, display a message
+                    alert('Failed to remove item from cart.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to remove item from cart.');
+            });
+        }
+    </script>
 {% endblock %}

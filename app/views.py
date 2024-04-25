@@ -1,8 +1,7 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .models import Product, CartItem
-from django.contrib.auth.models import User
-
+from django.http import JsonResponse
 import random  # Importing random for generating random prices
 
 def index_view(request):
@@ -35,19 +34,56 @@ def cart_view(request):
             # If the product or price attribute is missing, set the total price to 0
             item.total_price = 0
     
-    return render(request, 'cart.html', {'cart_items': cart_items})
+    # Calculate the total price for all items in the cart
+    total_price = calculate_total_price(cart_items)
+    
+    return render(request, 'cart.html', {'cart_items': cart_items, 'total_price': total_price})
+
+def calculate_total_price(cart_items):
+    """
+    Calculate the total price for all items in the cart.
+    """
+    total_price = 0
+    for item in cart_items:
+        total_price += item.product.price * item.quantity
+    return total_price
 
 def add_to_cart(request, product_id):
-    # Get or create the cart item for the product
-    cart_item, created = CartItem.objects.get_or_create(
-        product_id=product_id,
-        user=request.user if request.user.is_authenticated else None,
-        session_id=request.session.session_key
-    )
+    # Retrieve the product object
+    product = get_object_or_404(Product, id=product_id)
+    
+    # Check if the user is authenticated
+    if request.user.is_authenticated:
+        cart_item, created = CartItem.objects.get_or_create(
+            user=request.user,
+            product=product
+        )
+    else:
+        # If user is not authenticated, use session ID
+        session_id = request.session.session_key
+        cart_item, created = CartItem.objects.get_or_create(
+            session_id=session_id,
+            product=product
+        )
+    
+    # Increment quantity if the item is already in the cart
     if not created:
         cart_item.quantity += 1
         cart_item.save()
+    
+    # Redirect to the cart page
     return redirect('cart')
+
+def remove_from_cart(request, item_id):
+    # Retrieve the cart item
+    cart_item = get_object_or_404(CartItem, id=item_id)
+    
+    # Check if the cart item belongs to the current user or session
+    if cart_item.user == request.user or cart_item.session_id == request.session.session_key:
+        cart_item.delete()  # Delete the cart item
+        return JsonResponse({'success': True})
+    else:
+        return JsonResponse({'error': 'Unauthorized'}, status=403)
 
 def register_view(request):
     # Implement logic for registering users
@@ -99,4 +135,10 @@ def get_cart_items(request):
 
 def checkout_view(request):
     # Implement logic for the checkout page
-    return render(request, 'checkout.html')
+    cart_items = get_cart_items(request)
+    total_price = calculate_total_price(cart_items)
+    return render(request, 'checkout.html', {'cart_items': cart_items, 'total_price': total_price})
+
+def purchase_view(request):
+    # Implement logic for the purchase page
+    return render(request, 'purchase.html')

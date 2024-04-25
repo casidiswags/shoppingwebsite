@@ -34,7 +34,45 @@
                 <label for="confirm_password">Confirm Password:</label>
                 <input type="password" id="confirm_password" name="confirm_password" required style="display: block; margin: auto;">
             </div>
-            <button type="submit">Register</button>
+            <button type="submit" style="display: block; margin: auto;">Register</button>
         </form>
     </div>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        
+        .container {
+            margin-top: 50px;
+        }
+        .form-group {
+            text-align: left;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
 {% endblock %}
