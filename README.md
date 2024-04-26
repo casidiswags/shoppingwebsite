@@ -43,7 +43,7 @@
 8. **For Admin Access**
     ```
     Username: admin
-    password: 123456
+    password: 12345
     ```
 ## Git repository
 

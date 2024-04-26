@@ -21,11 +21,27 @@
         font-size: 18px;
         margin-top: 20px;
     }
+
+    /* Button Styles */
+    .return-button {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+    }
+
+    .return-button:hover {
+        background-color: #0056b3;
+    }
 </style>
 
 <div class="purchase-container">
     <h1>Thank you for your purchase!</h1>
     <p>Your order has been successfully processed.</p>
-    <!-- You can add additional content here as needed -->
+    <!-- Button to return to home page -->
+    <a href="{% url 'index' %}" class="return-button">Return to Home</a>
 </div>
 {% endblock %}
