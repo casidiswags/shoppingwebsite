@@ -38,6 +38,7 @@
     ```
 ## Cloud Deployment
 7. **The cloud deployement link for the project is:**
+    https://casidiswags.pythonanywhere.com/
 
 ## Admin Access
 8. **For Admin Access**
