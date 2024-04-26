@@ -23,6 +23,8 @@ def cart_view(request):
     # Fetch cart items associated with the user's session
     cart_items = get_cart_items(request)
     
+    total_price = 0  # Initialize total price
+    
     # Calculate the total price for each item in the cart
     for item in cart_items:
         # Retrieve the product associated with the cart item
@@ -30,13 +32,12 @@ def cart_view(request):
         # Check if the product exists and has a price attribute
         if product and hasattr(product, 'price'):
             item.total_price = product.price * item.quantity
+            total_price += item.total_price  # Accumulate total price
         else:
             # If the product or price attribute is missing, set the total price to 0
             item.total_price = 0
     
-    # Calculate the total price for all items in the cart
-    total_price = calculate_total_price(cart_items)
-    
+    # Render the cart page with cart items and total price
     return render(request, 'cart.html', {'cart_items': cart_items, 'total_price': total_price})
 
 def calculate_total_price(cart_items):
@@ -71,8 +72,11 @@ def add_to_cart(request, product_id):
         cart_item.quantity += 1
         cart_item.save()
     
-    # Redirect to the cart page
-    return redirect('cart')
+    # Count total items in the cart
+    total_items_in_cart = get_cart_items_count(request)
+    
+    # Return JSON response with updated cart item count
+    return JsonResponse({'cartItemCount': total_items_in_cart})
 
 def remove_from_cart(request, item_id):
     # Retrieve the cart item
@@ -133,11 +137,36 @@ def get_cart_items(request):
         session_key = request.session.session_key
         return CartItem.objects.filter(session_id=session_key)
 
+def get_cart_items_count(request):
+    # Fetch cart items count associated with the user's session
+    if request.user.is_authenticated:
+        return CartItem.objects.filter(user=request.user).count()
+    else:
+        session_key = request.session.session_key
+        return CartItem.objects.filter(session_id=session_key).count()
+
 def checkout_view(request):
-    # Implement logic for the checkout page
+    # Fetch cart items associated with the user's session
     cart_items = get_cart_items(request)
-    total_price = calculate_total_price(cart_items)
-    return render(request, 'checkout.html', {'cart_items': cart_items, 'total_price': total_price})
+    
+    total_price = 0  # Initialize total price
+    
+    # Calculate the total price for each item in the cart
+    for item in cart_items:
+        # Retrieve the product associated with the cart item
+        product = item.product
+        # Check if the product exists and has a price attribute
+        if product and hasattr(product, 'price'):
+            item.total_price = product.price * item.quantity
+            total_price += item.total_price  # Accumulate total price
+        else:
+            # If the product or price attribute is missing, set the total price to 0
+            item.total_price = 0
+    
+    if total_price == 0:  # If cart is empty
+        return render(request, 'cart_empty.html')  # Render cart empty page
+    else:
+        return render(request, 'checkout.html', {'cart_items': cart_items, 'total_price': total_price})
 
 def purchase_view(request):
     # Implement logic for the purchase page
