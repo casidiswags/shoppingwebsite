@@ -12,5 +12,5 @@ urlpatterns = [
     path('purchase/', purchase_view, name='purchase'),  # URL pattern for the purchase page
     path('add-to-cart/<int:product_id>/', add_to_cart, name='add_to_cart'),  # URL pattern for adding to cart
     path('remove-from-cart/<int:item_id>/', remove_from_cart, name='remove_from_cart'),  # URL pattern for removing from cart
-
+    
 ]
