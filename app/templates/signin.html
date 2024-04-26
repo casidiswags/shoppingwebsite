@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Sign In - {{ block.super }}
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h2>Sign In</h2>
+        <p>Please select how you want to sign in:</p>
+        <ul>
+            <li><a href="{% url 'index' %}">Sign In as Guest</a></li>
+            <li><a href="{% url 'admin:index' %}">Sign In as Admin</a></li>
+        </ul>
+    </div>
+{% endblock %}

@@ -27,6 +27,7 @@
             padding: 0;
             text-align: center;
             margin: 0; /* Added to remove default margin */
+            margin-left: 60px;
         }
 
         nav ul li {
@@ -121,10 +122,10 @@
         <ul>
             <li><a href="{% url 'index' %}">Home</a></li>
             <li><a href="{% url 'product_list' %}">Products</a></li>
-            <li><a href="{% url 'cart' %}">Cart</a></li>
             <li><a href="{% url 'register' %}">Register</a></li>
             <li><a href="{% url 'login' %}">Login</a></li>
             <li><a href="{% url 'admin:index' %}">Admin</a></li>
+            <li><a href="{% url 'cart' %}">Cart</a></li>
         </ul>
     </nav>
     <!-- Search form -->

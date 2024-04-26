@@ -6,7 +6,7 @@ import random  # Importing random for generating random prices
 
 def index_view(request):
     # Fetch 16 products to display on the homepage
-    products = Product.objects.all()[:16]
+    products = Product.objects.all()[:30]
     for product in products:
         # Generate random price for each product in pounds
         product.price = round(random.uniform(5, 7), 2)
@@ -171,3 +171,4 @@ def checkout_view(request):
 def purchase_view(request):
     # Implement logic for the purchase page
     return render(request, 'purchase.html')
+
